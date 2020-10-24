@@ -6,14 +6,31 @@ namespace EAuction.Core.Tests
     public class AuctionReceiveBid
     {
         [Fact]
-        public void DoesNotAllowReceiveNewBidWhenAuctionIsClosed()
+        public void DoesNotAllowReceiveBidWhenLastBidIsFromSameInterested()
         {
             //Arrange
             var auction = new Auction("Van Gogh");
             var johnDoe = new Interested("John Doe", auction);
             auction.StartTrading();
             auction.ReceiveBid(johnDoe, 800);
-            auction.ReceiveBid(johnDoe, 900);
+
+            //Act
+            auction.ReceiveBid(johnDoe, 1000);
+
+            //Assert
+            Assert.Single(auction.Bids);
+        }
+
+        [Fact]
+        public void DoesNotAllowReceiveNewBidWhenAuctionIsClosed()
+        {
+            //Arrange
+            var auction = new Auction("Van Gogh");
+            var johnDoe = new Interested("John Doe", auction);
+            var janeDoe = new Interested("Jane Doe", auction);
+            auction.StartTrading();
+            auction.ReceiveBid(johnDoe, 800);
+            auction.ReceiveBid(janeDoe, 900);
             auction.ClosesAuction();
 
             //Act
@@ -33,11 +50,20 @@ namespace EAuction.Core.Tests
             //Arrange
             var auction = new Auction("Van Gogh");
             var johnDoe = new Interested("John Doe", auction);
+            var janeDoe = new Interested("Jane Doe", auction);
 
             //Act
-            foreach (var amount in amounts)
+            for (int i = 0; i < amounts.Length; i++)
             {
-                auction.ReceiveBid(johnDoe, amount);
+                double amount = amounts[i];
+                if ((i % 2) == 0)
+                {
+                    auction.ReceiveBid(johnDoe, amount);
+                }
+                else
+                {
+                    auction.ReceiveBid(janeDoe, amount);
+                }
             }
 
             //Assert

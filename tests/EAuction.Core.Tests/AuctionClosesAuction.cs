@@ -13,12 +13,21 @@ namespace EAuction.Core.Tests
             //Arrange
             var auction = new Auction("Van Gogh");
             var johnDoe = new Interested("John Doe", auction);
+            var janeDoe = new Interested("Jane Doe", auction);
 
             auction.StartTrading();
 
-            foreach (var amount in amounts)
+            for (int i = 0; i < amounts.Length; i++)
             {
-                auction.ReceiveBid(johnDoe, amount);
+                double amount = amounts[i];
+                if ((i % 2) == 0)
+                {
+                    auction.ReceiveBid(johnDoe, amount);
+                }
+                else
+                {
+                    auction.ReceiveBid(janeDoe, amount);
+                }
             }
 
             //Act

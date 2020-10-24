@@ -6,6 +6,7 @@ namespace EAuction.Core
     public class Auction
     {
         private IList<Bid> _bids;
+        private Interested _lastInterested;
         public IEnumerable<Bid> Bids => _bids;
         public string Piece { get; }
         public Bid Winner { get; private set; }
@@ -18,11 +19,18 @@ namespace EAuction.Core
             State = AuctionState.Created;
         }
 
+        private bool NewBidAccepted(Interested interested, double amount)
+        {
+            return (State == AuctionState.InProgress)
+                && (interested != _lastInterested);
+        }
+
         public void ReceiveBid(Interested interested, double amount)
         {
-            if (State == AuctionState.InProgress)
+            if (NewBidAccepted(interested, amount))
             {
                 _bids.Add(new Bid(interested, amount));
+                _lastInterested = interested;
             }
         }
 
