@@ -1,3 +1,4 @@
+using System;
 using Xunit;
 
 namespace EAuction.Core.Tests
@@ -38,10 +39,25 @@ namespace EAuction.Core.Tests
         }
 
         [Fact]
+        public void ThrowsInvalidOperationExceptionWhenCloseAuctionNotStarted()
+        {
+            //Arrange
+            var auction = new Auction("Van Gogh");
+
+            //Act
+            Action act = () => auction.ClosesAuction();
+
+            //Assert
+            var exception = Assert.Throws<InvalidOperationException>(act);
+            Assert.Equal($"Não é possível fechar um leilão sem iniciá-lo. Utilize o método {nameof(auction.StartTrading)}.", exception.Message);
+        }
+
+        [Fact]
         public void ReurnZeroWhenHaveNoBids()
         {
             //Arrange
             var auction = new Auction("Van Gogh");
+            auction.StartTrading();
 
             //Act
             auction.ClosesAuction();
