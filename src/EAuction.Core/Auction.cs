@@ -29,8 +29,9 @@ namespace EAuction.Core
         public void ClosesAuction()
         {
             Winner = Bids
+                .DefaultIfEmpty(new Bid(null, 0))
                 .OrderBy(b => b.Amount)
-                .Last();
+                .LastOrDefault();
         }
     }
 }

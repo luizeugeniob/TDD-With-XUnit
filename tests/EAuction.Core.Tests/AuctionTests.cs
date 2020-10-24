@@ -83,5 +83,17 @@ namespace EAuction.Core.Tests
             Assert.Equal(johnSmith, auction.Winner.Interested);
         }
 
+        [Fact]
+        public void Auction_Without_Bids()
+        {
+            //Arrange
+            var auction = new Auction("Van Gogh");
+
+            //Act
+            auction.ClosesAuction();
+
+            //Assert
+            Assert.Equal(0, auction.Winner.Amount);
+        }
     }
 }
