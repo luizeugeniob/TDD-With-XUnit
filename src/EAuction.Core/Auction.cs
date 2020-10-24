@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace EAuction.Core
 {
@@ -7,6 +8,7 @@ namespace EAuction.Core
         private IList<Bid> _bids;
         public IEnumerable<Bid> Bids => _bids;
         public string Piece { get; }
+        public Bid Winner { get; private set; }
 
         public Auction(string piece)
         {
@@ -26,7 +28,9 @@ namespace EAuction.Core
 
         public void ClosesAuction()
         {
-
+            Winner = Bids
+                .OrderBy(b => b.Amount)
+                .Last();
         }
     }
 }
