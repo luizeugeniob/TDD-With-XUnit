@@ -9,7 +9,8 @@ namespace EAuction.Core.Tests
         public void DoesNotAllowReceiveBidWhenLastBidIsFromSameInterested()
         {
             //Arrange
-            var auction = new Auction("Van Gogh");
+            var evaluation = new UpperAmount();
+            var auction = new Auction("Van Gogh", evaluation);
             var johnDoe = new Interested("John Doe", auction);
             auction.StartTrading();
             auction.ReceiveBid(johnDoe, 800);
@@ -25,7 +26,8 @@ namespace EAuction.Core.Tests
         public void DoesNotAllowReceiveNewBidWhenAuctionIsClosed()
         {
             //Arrange
-            var auction = new Auction("Van Gogh");
+            var evaluation = new UpperAmount();
+            var auction = new Auction("Van Gogh", evaluation);
             var johnDoe = new Interested("John Doe", auction);
             var janeDoe = new Interested("Jane Doe", auction);
             auction.StartTrading();
@@ -48,7 +50,8 @@ namespace EAuction.Core.Tests
         public void BidsStayZeroWhenAuctionWasNotStarted(double[] amounts)
         {
             //Arrange
-            var auction = new Auction("Van Gogh");
+            var evaluation = new UpperAmount();
+            var auction = new Auction("Van Gogh", evaluation);
             var johnDoe = new Interested("John Doe", auction);
             var janeDoe = new Interested("Jane Doe", auction);
 

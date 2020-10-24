@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace EAuction.Core
 {
@@ -8,15 +7,19 @@ namespace EAuction.Core
     {
         private IList<Bid> _bids;
         private Interested _lastInterested;
+        private IEvaluationModality _evaluation;
+
         public IEnumerable<Bid> Bids => _bids;
         public string Piece { get; }
         public Bid Winner { get; private set; }
         public AuctionState State { get; private set; }
+        public double TargetAmount { get; }
 
-        public Auction(string piece)
+        public Auction(string piece, IEvaluationModality evaluation)
         {
-            Piece = piece;
             _bids = new List<Bid>();
+            _evaluation = evaluation;
+            Piece = piece;
             State = AuctionState.Created;
         }
 
@@ -47,10 +50,7 @@ namespace EAuction.Core
                 throw new InvalidOperationException($"Não é possível fechar um leilão sem iniciá-lo. Utilize o método {nameof(StartTrading)}.");
             }
 
-            Winner = Bids
-                .DefaultIfEmpty(new Bid(null, 0))
-                .OrderBy(b => b.Amount)
-                .LastOrDefault();
+            Winner = _evaluation.Evaluates(this);
             State = AuctionState.Closed;
         }
     }
