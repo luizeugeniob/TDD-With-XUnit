@@ -15,7 +15,7 @@ namespace EAuction.Core
         {
             Piece = piece;
             _bids = new List<Bid>();
-            State = AuctionState.InProgress;
+            State = AuctionState.Created;
         }
 
         public void ReceiveBid(Interested interested, double amount)
@@ -28,7 +28,7 @@ namespace EAuction.Core
 
         public void StartTrading()
         {
-
+            State = AuctionState.InProgress;
         }
 
         public void ClosesAuction()
@@ -43,6 +43,7 @@ namespace EAuction.Core
 
     public enum AuctionState
     {
+        Created,
         InProgress,
         Closed
     }

@@ -14,6 +14,8 @@ namespace EAuction.Core.Tests
             var auction = new Auction("Van Gogh");
             var johnDoe = new Interested("John Doe", auction);
 
+            auction.StartTrading();
+
             foreach (var amount in amounts)
             {
                 auction.ReceiveBid(johnDoe, amount);
